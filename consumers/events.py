@@ -14,7 +14,7 @@ async def _handle_profile_liked(payload: dict, user_id: str) -> None:
         "user_id": user_id,
         "name": payload.get("name"),
         "age": payload.get("age"),
-        "location": payload.get("location"),
+        "location": payload.get("location") or "",
         "bio": payload.get("bio"),
         "photo": payload.get("photo_url"),
         "allure_score": payload.get("allure_score"),
