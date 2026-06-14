@@ -46,3 +46,19 @@ class StartPayload(BaseModel):
     persona_id: Optional[str] = None
     daily_like_limit: int = 25
     duration: Optional[str] = None
+
+
+class LinkPayload(BaseModel):
+    phone_number: str
+
+
+class OtpPayload(BaseModel):
+    type: str  # "phone" | "email"
+    code: str
+
+
+class LinkStatus(BaseModel):
+    instance_id: str
+    user_id: str
+    status: str
+    updated_at: Optional[str] = None

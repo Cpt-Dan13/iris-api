@@ -3,6 +3,7 @@ import logging
 import aio_pika
 import broker
 import event_bus
+import link_status_store
 from db import get_supabase
 
 logger = logging.getLogger(__name__)
@@ -71,11 +72,19 @@ async def _handle_message_sent(payload: dict, user_id: str) -> None:
         }).execute()
 
 
+async def _handle_link_status(payload: dict, user_id: str) -> None:
+    status = payload.get("status", "")
+    instance_id = payload.get("instance_id", "")
+    if status and instance_id:
+        link_status_store.set_status(instance_id=instance_id, user_id=user_id, status=status)
+
+
 _HANDLERS = {
     "profile_liked": _handle_profile_liked,
     "match_found": _handle_match_found,
     "message_sent": _handle_message_sent,
     "prospective_updated": _handle_prospective_updated,
+    "link_status": _handle_link_status,
 }
 
 
