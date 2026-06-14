@@ -45,3 +45,4 @@ class InstanceStatus(BaseModel):
 class StartPayload(BaseModel):
     persona_id: Optional[str] = None
     daily_like_limit: int = 25
+    duration: Optional[str] = None
