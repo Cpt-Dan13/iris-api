@@ -38,6 +38,14 @@ async def _handle_match_found(payload: dict, user_id: str) -> None:
     }).execute()
 
 
+async def _handle_prospective_updated(payload: dict, user_id: str) -> None:
+    profile_id = payload.get("profile_id")
+    get_supabase().table("liked_profiles").update({
+        "prospective_score": payload.get("prospective_score"),
+        "prospective_level": payload.get("prospective_level"),
+    }).eq("id", profile_id).execute()
+
+
 async def _handle_message_sent(payload: dict, user_id: str) -> None:
     profile_id = payload.get("profile_id")
     new_message = {
@@ -67,6 +75,7 @@ _HANDLERS = {
     "profile_liked": _handle_profile_liked,
     "match_found": _handle_match_found,
     "message_sent": _handle_message_sent,
+    "prospective_updated": _handle_prospective_updated,
 }
 
 
