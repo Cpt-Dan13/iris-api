@@ -4,6 +4,7 @@ import aio_pika
 import broker
 import event_bus
 import link_status_store
+import phase_store
 from db import get_supabase
 
 logger = logging.getLogger(__name__)
@@ -79,12 +80,21 @@ async def _handle_link_status(payload: dict, user_id: str) -> None:
         link_status_store.set_status(instance_id=instance_id, user_id=user_id, status=status)
 
 
+async def _handle_automation_phase(payload: dict, user_id: str) -> None:
+    instance_id = payload.get("instance_id", "")
+    label = payload.get("label", "")
+    progress = int(payload.get("progress", 0))
+    if instance_id:
+        phase_store.set_phase(instance_id=instance_id, label=label, progress=progress)
+
+
 _HANDLERS = {
     "profile_liked": _handle_profile_liked,
     "match_found": _handle_match_found,
     "message_sent": _handle_message_sent,
     "prospective_updated": _handle_prospective_updated,
     "link_status": _handle_link_status,
+    "automation_phase": _handle_automation_phase,
 }
 
 
