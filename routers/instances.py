@@ -45,6 +45,7 @@ async def list_instances():
 
 @router.post("/{instance_id}/link")
 async def start_link(instance_id: str, body: LinkPayload, user_id: str):
+    link_status_store.clear_status(instance_id)
     await broker.publish("iris.commands", IrisCommand(
         command="link_account",
         user_id=user_id,
